@@ -21,7 +21,8 @@ class Groups:
         self.__URL = read_information.URL_IU_ALL_GR
         self.session = HTMLSession()
 
-    async def parse_all_groups(self) -> None | list:
+
+    async def parse_all_groups(self) -> None | dict:
         HEADERS: dict = {       
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
             "Accept-Encoding": "gzip, deflate",
@@ -33,7 +34,6 @@ class Groups:
         params = {"do": "groups"}
         req_to_iu = self.session.post(self.__URL, headers=HEADERS, data=params)
 
-        all_groups_lst: list = []
 
         if req_to_iu.status_code == 200:
             
@@ -45,9 +45,22 @@ class Groups:
             return req_to_iu.json()
         
         return None
+    
+
+    async def get_all_groups(self) -> list:
+        all_groups_list: list = list()
+
+        all_groups = await self.parse_all_groups()
+
+        for name_specialization in all_groups:
+            all_groups_list.extend(list(all_groups[name_specialization].keys()))
+        
+        return all_groups_list
+
 
     def __str__(self):
         return "All groups: ".format(self.groups)
     
+
     def __del__(self):
         print("Парсинг групп окончен.")

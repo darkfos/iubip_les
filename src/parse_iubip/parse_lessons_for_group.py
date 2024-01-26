@@ -19,7 +19,7 @@ class Lessons:
         self.name_group = name_group
         self.connection = HTMLSession()
     
-    def parse_all_lessons(self) -> None | list:
+    async def parse_all_lessons(self) -> None | list:
         """
             Получение расписания всех пар в учебном заведении - ИУБИП.
         """
@@ -32,7 +32,7 @@ class Lessons:
             with open("iubip_les/data/lessons_data.json", "w", encoding="UTF-8") as j_w:
                 json_data: list = json.dumps(req.json(), indent=4, ensure_ascii=False)
                 j_w.write(json_data)
-                
+
             return req.json()
         
         else:
