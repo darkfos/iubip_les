@@ -1,3 +1,4 @@
+from emoji import emojize
 
 
 async def get_start_message(name_user: str) -> str:
@@ -18,3 +19,6 @@ async def get_help_commands() -> str:
 \nТак же ты можешь ввести название любой группы и получить полное расписание!"
 
     return help_text
+
+
+text_to_all_groups = emojize(":bullseye: Пожалуйста выберите формат получения списка <b>всех</b> учебных групп", language="en")
