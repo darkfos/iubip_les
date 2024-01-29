@@ -12,6 +12,7 @@ async def set_commands_to_bot(iubip_bot: Bot) -> None:
         types.BotCommand(command="all_lessons", description="Получение расписания на текущий день"),
         types.BotCommand(command="lessons_now", description="Получение расписания на текущий день"),
         types.BotCommand(command="all_groups", description="Получение списка всех учебных групп"),
+        types.BotCommand(command="cancel", description="Отмена")
     )
 
     await iubip_bot.set_my_commands(commands=all_commands)

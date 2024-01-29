@@ -16,9 +16,12 @@ async def get_help_commands() -> str:
 /all_lessons - Вывод всех пар по указанной группе\n\
 /lessons_now - Вывод всех пар на текущий день\n\
 /all_groups - Вывод всех учебных групп\n\
+/cancel - Отмена\n\
 \nТак же ты можешь ввести название любой группы и получить полное расписание!"
 
     return help_text
 
 
 text_to_all_groups = emojize(":bullseye: Пожалуйста выберите формат получения списка <b>всех</b> учебных групп", language="en")
+
+text_cancel = emojize(":check_mark_button: Вы сбросили <b>все</b> процессы.")
