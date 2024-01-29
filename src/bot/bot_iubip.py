@@ -9,6 +9,8 @@ from aiogram.fsm.storage.memory import MemoryStorage
 #Локальные директивы
 from read_information import TOKEN
 from src.bot.handlers.commands import commands_router
+from src.bot.utils import utilities_for_bot
+
 
 async def start_bot():
     Bot_iubip = Bot(token=TOKEN)
@@ -20,4 +22,8 @@ async def start_bot():
         commands_router
     )
 
+    #Подключаем description
+    await utilities_for_bot.set_commands_to_bot(Bot_iubip)
+
+    #Запуск поллинга
     await dp_bot.start_polling(Bot_iubip)

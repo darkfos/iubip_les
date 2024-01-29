@@ -10,6 +10,7 @@ from aiogram.filters import CommandStart, Command
 
 #Локальные директивы
 from src.bot.text import commands_text
+from src.bot.kb import inline_kb
 
 commands_router = Router()
 
@@ -34,4 +35,8 @@ async def help_commands(message: Message) -> None:
     """
     logging.info("Пользователь {} активировал команду help".format(message.from_user.full_name))
     await message.answer(text=await commands_text.get_help_commands(), parse_mode="HTML")
-    
+
+
+@commands_router.message(Command("all_groups"))
+async def all_groups_command(message: Message) -> None:
+    await message.answer(text=commands_text.text_to_all_groups, parse_mode="HTML", reply_markup=await inline_kb.get_all_groups_bt())
