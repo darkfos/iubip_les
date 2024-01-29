@@ -11,7 +11,7 @@ from aiogram.fsm.context import FSMContext
 
 #Локальные директивы
 from src.bot.text import commands_text
-from src.bot.kb import inline_kb
+from src.bot.kb import inline_kb, reply_kb
 
 commands_router = Router()
 
@@ -25,7 +25,7 @@ async def start_bot(message: Message) -> None:
     #Картинка для отправки
     photo_to_send = FSInputFile("iubip_les/src/static/main_iubip.png")
     logging.info("Пользователь {} активировал команду start".format(message.from_user.full_name))
-    await message.answer_photo(photo=photo_to_send, caption=await commands_text.get_start_message(message.from_user.full_name), parse_mode="HTML")
+    await message.answer_photo(photo=photo_to_send, caption=await commands_text.get_start_message(message.from_user.full_name), parse_mode="HTML", reply_markup=await reply_kb.get_start_bt())
 
 
 @commands_router.message(Command("help"))
@@ -58,6 +58,6 @@ async def cancel_command(message: Message, state: FSMContext) -> None:
 
     #Очистка состояния
     await state.clear()
-    
+
     await message.answer(text=commands_text.text_cancel, parse_mode="HTML")
     

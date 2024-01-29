@@ -28,4 +28,7 @@ async def start_bot():
     await utilities_for_bot.set_commands_to_bot(Bot_iubip)
 
     #Запуск поллинга
-    await dp_bot.start_polling(Bot_iubip)
+    try:
+        await dp_bot.start_polling(Bot_iubip)
+    except KeyboardInterrupt as ki:
+        logging.exception("Бот завершил свою работу")

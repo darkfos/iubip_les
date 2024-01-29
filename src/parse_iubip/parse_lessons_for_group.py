@@ -88,4 +88,4 @@ class Lessons:
                 
 
 
-asyncio.run(Lessons("К2Л1(11)").get_now_lessons())
+asyncio.run(Lessons("К2Л1(11)").get_all_lessons_for_group())
