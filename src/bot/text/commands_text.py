@@ -25,3 +25,5 @@ async def get_help_commands() -> str:
 text_to_all_groups = emojize(":bullseye: Пожалуйста выберите формат получения списка <b>всех</b> учебных групп", language="en")
 
 text_cancel = emojize(":check_mark_button: Вы сбросили <b>все</b> процессы.")
+
+text_to_find_group = emojize("⌨️ Пожалуйста введите вашу группу")

@@ -3,6 +3,8 @@ import json
 import asyncio
 import datetime
 
+from emoji import emojize
+
 sys.path.insert(1, os.path.join(sys.path[0], "../.."))
 
 import read_information
@@ -55,13 +57,10 @@ class Lessons:
             for day in res_json[self.name_group][1][item][1]:
                 for lessons in res_json[self.name_group][1][item][1].get(day):
                     result: list = list(res_json[self.name_group][1][item][1].get(day).get(lessons))[0]
-                    message = f"Пара №: {result.get("LES")}\nПредмет: {result.get("SUBJECT").rstrip()}\nАудитория: {result.get("AUD")}\nПреподаватель: {result.get("NAME")}\nКафедра: {result.get("CAFEDRA")}\nДата: {result.get("DATE")}\nКурс: {result.get("COURSE")}\n"
-                    all_lessons.append(message)
-                    print(message)
-                all_lessons.append("\n")
-
+                    message = emojize(f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n", language="en")
+                    all_lessons.append(message)    
+        
         return all_lessons
-    
 
     async def get_now_lessons(self, now_day: str = str(datetime.datetime.now().day)) -> list | str:
         """
