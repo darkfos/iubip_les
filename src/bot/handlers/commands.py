@@ -51,7 +51,15 @@ async def all_groups_command(message: Message) -> None:
 @commands_router.message(lambda message: message.text[2:].lower() in "все пары")
 @commands_router.message(Command("all_lessons"))    
 async def get_all_lessons(message: Message, state: FSMContext):
+    logging.info("Обработка, получение всех пар")
     await state.set_state(lessons_for_group.GetLessonsForGroup.name_group)
+    await message.answer(text=commands_text.text_to_find_group)
+
+
+@commands_router.message(lambda message: message.text[2:].lower() in "пары на сегодня")
+@commands_router.message(Command("lessons_now"))
+async def command_lessons_now(message: Message, state: FSMContext):
+    await state.set_state(lessons_for_group.GetLessonsNow.name_group)
     await message.answer(text=commands_text.text_to_find_group)
 
 

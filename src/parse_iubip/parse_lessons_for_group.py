@@ -62,7 +62,7 @@ class Lessons:
         
         return all_lessons
 
-    async def get_now_lessons(self, now_day: str = str(datetime.datetime.now().day)) -> list | str:
+    async def get_now_lessons(self, now_day: str = str(datetime.datetime.now().day)) -> list | bool:
         """
             Получение всех пар на текущий день
         """
@@ -75,14 +75,15 @@ class Lessons:
             for day in res_json[self.name_group][1][item][1]:
                 for lessons in res_json[self.name_group][1][item][1].get(day):
                     result: list = list(res_json[self.name_group][1][item][1].get(day).get(lessons))[0]
-                    if now_day in result.get("DATE"):
-                        message = f"Пара №: {result.get("LES")}\nПредмет: {result.get("SUBJECT").rstrip()}\nАудитория: {result.get("AUD")}\nПреподаватель: {result.get("NAME")}\nКафедра: {result.get("CAFEDRA")}\nДата: {result.get("DATE")}\nКурс: {result.get("COURSE")}\n"
+                    data_find = result.get("DATE").split("-")
+                    if int(now_day) == int(data_find[0]):
+                        message = f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n"
                         all_lessons.append(message)
                         all_lessons.append("\n")
 
         if all_lessons:
             return all_lessons
-        return "Расписание пар на сегодня отсутствуют"
+        return False
     
                 
 
