@@ -10,6 +10,7 @@ from emoji import emojize
 #Подключаем свои директивы
 from src.bot.filters import all_groups_filter
 from src.bot.utils.others import work_data
+from src.bot.handlers.commands import get_all_lessons
 
 callback_router: Router = Router()
 
@@ -23,3 +24,8 @@ async def get_all_groups_file(callback_message: types.CallbackQuery):
     else:
         logging.info("Пользователь {0} выбрал список всех учебных групп в формате csv.".format(callback_message.message.from_user.full_name))
         await callback_message.message.answer_document(document=await work_data.get_csv_all_groups())
+
+
+@callback_router.message()
+async def response_to_simple_message(message: types.Message):
+    await message.answer("Не могу распознать ваш текст, ожидаю команду или название группы")

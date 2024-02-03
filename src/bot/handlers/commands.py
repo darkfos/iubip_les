@@ -48,11 +48,11 @@ async def all_groups_command(message: Message) -> None:
     logging.info("Пользователь {} активировал команду all_groups ожидается выбор формата ответа".format(message.from_user.full_name))
     await message.answer(text=commands_text.text_to_all_groups, parse_mode="HTML", reply_markup=await inline_kb.get_all_groups_bt())
 
-
+@commands_router.message(lambda message: message.text[2:].lower() in "все пары")
 @commands_router.message(Command("all_lessons"))    
 async def get_all_lessons(message: Message, state: FSMContext):
+    await state.set_state(lessons_for_group.GetLessonsForGroup.name_group)
     await message.answer(text=commands_text.text_to_find_group)
-    await state.set_state(lessons_for_group.GetLessonsForGroup)
 
 
 @commands_router.message(Command("cancel"))
