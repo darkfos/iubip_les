@@ -14,9 +14,8 @@ async def get_temp(tg_id: int) -> str | bool:
 
     try:
         result: tuple = db.cursor.execute(f"""
-        SELECT name_group FROM templates WHERE tg_id == {tg_id}
+        SELECT name_group FROM templates WHERE tg_id = {tg_id}
         """).fetchone()
-        print(result)
         return result
     except sql.OperationalError:
         return False

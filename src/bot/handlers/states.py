@@ -79,8 +79,7 @@ async def get_lessons_now(message: types.Message, state: FSMContext):
 
 
 #Обработка создания шаблона
-@state_router.message(CreateTemplate.name_group)
-@state_router.message(check_group_in_list.CheckGroup())
+@state_router.message(CreateTemplate.name_group, check_group_in_list.CheckGroup(), check_templates.CheckTemplates())
 async def create_template(message: types.Message, state: FSMContext):
     all_groups: list = await Groups().get_all_groups()
     message_to_res = message.text

@@ -14,14 +14,12 @@ class CheckGroup(BaseFilter):
     async def __call__(
             self,
             message: types.Message,
-            state: FSMContext
     ):
         all_groups: list = await Groups().get_all_groups()
 
         for group in all_groups:
             if message.text in group:
                 return True
-        
-        await message.answer("🔴 Данной группы не существует")
-        await state.clear()
-        return False
+        else:
+            await message.answer("🔴 Данной группы не существует")
+            return False
