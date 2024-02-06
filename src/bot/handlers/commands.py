@@ -13,7 +13,7 @@ from aiogram.fsm.context import FSMContext
 from src.bot.text import commands_text
 from src.bot.kb import inline_kb, reply_kb
 from src.bot.states import lessons_for_group, work_with_db as wwd
-from src.parse_iubip import parse_lessons_for_group
+from src.parse_iubip.parse_lessons_for_group import Lessons
 #БД
 from src.database import db_templates as db_t, db_reviews as db_r
 
@@ -102,13 +102,13 @@ async def delete_template(message: Message):
 @commands_router.message(Command("template"))
 async def get_lessons_for_template(message: Message):
     result = await db_t.get_temp(message.from_user.id)
-
     if result:
-        lessons_object = lessons_for_group.Lessons(result[0])
+        lessons_object = Lessons(result[0])
 
-        message: list = await lessons_object.parse_lessons_for_group()
+        message_to_user: list = await lessons_object.get_all_lessons_for_group()
 
-        for lesson in message:
+        await message.answer("<i><b>Расписание занятий:</b></i>", parse_mode="HTML")
+        for lesson in message_to_user:
             await message.answer(text=lesson, parse_mode="HTML")
     
     else:

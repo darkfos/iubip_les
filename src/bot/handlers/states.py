@@ -6,11 +6,16 @@ sys.path.insert(1, os.path.join(sys.path[0], "../.."))
 from aiogram import types, Router
 from aiogram.fsm.context import FSMContext
 
+#Локальные директивы
 from src.bot.states.lessons_for_group import GetLessonsForGroup, GetLessonsNow
-from src.bot.filters import check_group_in_list
+from src.bot.states.work_with_db import CreateTemplate, CreateReview
+from src.bot.filters import check_group_in_list, check_templates
 
 from src.parse_iubip.parse_lessons_for_group import Lessons
 from src.parse_iubip.parse_all_groups import Groups
+
+#БД
+from src.database import db_reviews, db_templates
 
 state_router: Router = Router()
 
@@ -71,3 +76,25 @@ async def get_lessons_now(message: types.Message, state: FSMContext):
 
     else:
         await message.answer(text="Группа не была найдена, попробуйте ещё раз.")
+
+
+#Обработка создания шаблона
+@state_router.message(CreateTemplate.name_group)
+@state_router.message(check_group_in_list.CheckGroup())
+async def create_template(message: types.Message, state: FSMContext):
+    all_groups: list = await Groups().get_all_groups()
+    message_to_res = message.text
+
+    for group in all_groups:
+        if message_to_res in group:
+            message_to_res = group
+
+    await state.update_data(name_group = message_to_res)
+    all_data = await state.get_data()
+    await state.clear()
+    db_tmp = await db_templates.post_temp(name_user=message.from_user.full_name, name_group=all_data.get("name_group"), tg_id=message.from_user.id)
+
+    if db_tmp:
+        await message.answer("💥 Ваш шаблон был успешно создан")
+    else:
+        await message.answer("🔴 К сожалению ваш шаблон не был создан.")

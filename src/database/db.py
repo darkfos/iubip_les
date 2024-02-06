@@ -8,24 +8,25 @@ import sqlite3 as sql3
 class Database:
 
     def __init__(self):
-        self.db = sql3.connect("../../iubip.db")
+        self.db = sql3.connect("iubip.db")
         self.cursor = self.db.cursor()
 
         # Создание таблиц
 
         self.cursor.execute(
             """CREATE TABLE IF NOT EXISTS reviews(
-            user_id INT PRIMARY KEY,
+            user_id INTEGER  PRIMARY KEY autoincrement,
             name_user TEXT,
+            message TEXT,
             tg_id TEXT
             )"""
         )
 
         self.cursor.execute(
             """CREATE TABLE IF NOT EXISTS templates(
-            user_id INT PRIMARY KEY,
+            user_id INTEGER  PRIMARY KEY autoincrement,
             name_user TEXT,
-            name_group TEXT
+            name_group TEXT,
             tg_id TEXT
             )"""
         )
