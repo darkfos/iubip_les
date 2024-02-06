@@ -1,9 +1,9 @@
 import sys, os
+import sqlite3 as sql
 
 sys.path.insert(1, os.path.join(sys.path[0], "../.."))
 
-from db import Database
-
+from src.database.db import Database
 
 db = Database()
 
@@ -24,7 +24,7 @@ async def add_review(**kwargs) -> bool:
     try:
         db.cursor.execute(f"INSERT INTO reviews VALUES ({kwargs.values()})")
         return True
-    except ValueError:
+    except sql.OperationalError:
         return False
 
 
@@ -32,5 +32,5 @@ async def del_review(tg_id: int) -> bool:
     try:
         db.cursor.execute(f"DELETE FROM reviews WHERE tg_id == {tg_id}")
         return True
-    except ValueError:
+    except sql.OperationalError:
         return False
