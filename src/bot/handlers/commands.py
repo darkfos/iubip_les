@@ -64,6 +64,7 @@ async def get_all_lessons(message: Message, state: FSMContext):
 @commands_router.message(lambda message: message.text[2:].lower() in "пары на сегодня")
 @commands_router.message(Command("lessons_now"))
 async def command_lessons_now(message: Message, state: FSMContext):
+    logging.info("Обработка команды 'пары на сегодня'")
     await state.set_state(lessons_for_group.GetLessonsNow.name_group)
     await message.answer(text=commands_text.text_to_find_group)
 
@@ -88,6 +89,7 @@ async def cancel_command(message: Message, state: FSMContext) -> None:
 async def create_template(message: Message, state: FSMContext):
     await message.answer("💥 Хорошо, {0} давай создадим тебе шаблон для поиска. Не забудь его можно удалить с помощью команды <b>/delete_template</b> !".format(message.from_user.full_name), parse_mode="HTML")
     await state.set_state(wwd.CreateTemplate.name_group)
+    logging.info("Пользователь {} создает свой шаблон, ввод названия группы").format(message.from_user.full_name)
     await message.answer("🖍️ Введи название своей группы")
 
 
@@ -97,11 +99,17 @@ async def delete_template(message: Message):
     result = await db_t.del_temp(message.from_user.id)
     if result:
         await message.answer("💥 Ваш шаблон <b>был успешно удалён</b>", parse_mode="HTML")
+        logging.info("Пользователь {} удалил свой шаблон").format(message.from_user.full_name)
     else: await message.answer("🔴 <b>Шаблон не был удалён</b>, возможно вы его ещё не создали", parse_mode="HTML")
 
 
 @commands_router.message(Command("template"))
 async def get_lessons_for_template(message: Message):
+    """
+        Обработка шаблона, вывод списка пар на 3 дня.
+    """
+    
+    logging.info("Пользователь {} вызвал шаблон для получения расписания на 3 дня").format(message.from_user.full_name)
     result = await db_t.get_temp(message.from_user.id)
     if result:
         lessons_object = Lessons(result[0])
@@ -111,7 +119,6 @@ async def get_lessons_for_template(message: Message):
 
         all_less: list = list()
 
-        print(message_to_user[1])
 
         if message_to_user:
 

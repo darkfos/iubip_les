@@ -118,11 +118,24 @@ class Lessons:
                             6: "Воскресенье"
                         }
 
+                        #Берём время расписания пар
+                        
+                        time_to_lesson: dict = {
+                            1: "<b>08:20 - 09:50</b>",
+                            2: "<b>10:00 - 11:30</b>",
+                            3: "<b>11:40 - 13:10</b>",
+                            4: "<b>13:30 - 15:00</b>",
+                            5: "<b>15:10 - 16:40</b>",
+                            6: "<b>17:00 - 18:30</b>",
+                            7: "<b>18:40 - 20:10</b>",
+                            8: "<b>20:20 - 21:50</b>",
+                        }
+
                         local_date: datetime.datetime = datetime.datetime(*map(int, result.get("DATE").strip().split("-")[::-1]))
 
                         all_week_days.append(week_days.get(local_date.weekday()))
 
-                        message = f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n\n"
+                        message = f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n{emojize(":hourglass_not_done:", language="en")} <b>Время пары</b>: {time_to_lesson.get(int(result.get("LES")))}\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n\n"
                         d3_lessons.append(message)
                         flag_state = True
 
