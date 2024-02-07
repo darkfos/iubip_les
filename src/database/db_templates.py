@@ -32,7 +32,7 @@ async def post_temp(**kwargs) -> bool:
 
 async def del_temp(tg_id: int) -> bool:
     try:
-        db.cursor.execute(f"""DELETE FROM templates WHERE tg_id == ({tg_id})""")
+        db.cursor.execute(f"""DELETE FROM templates WHERE tg_id = ({tg_id})""")
         db.db.commit()
         return True
     except sql.OperationalError:

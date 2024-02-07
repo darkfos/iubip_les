@@ -38,7 +38,7 @@ class Groups:
         if req_to_iu.status_code == 200:
             
             #Запись данных в файл
-            with open("iubip_les/data/all_groups_data.json", "w", encoding="UTF-8") as f_w:
+            with open("data/all_groups_data.json", "w", encoding="UTF-8") as f_w:
                 json_data: list = json.dumps(req_to_iu.json(), indent=4, ensure_ascii=False)
                 f_w.write(json_data)
             

@@ -1,6 +1,5 @@
 import asyncio
 import logging
-import os, sys
 
 from src.bot import bot_iubip
 

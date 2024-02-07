@@ -8,6 +8,7 @@ from aiogram.types import Message, FSInputFile
 from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 
+from datetime import datetime
 
 #Локальные директивы
 from src.bot.text import commands_text
@@ -105,11 +106,37 @@ async def get_lessons_for_template(message: Message):
     if result:
         lessons_object = Lessons(result[0])
 
-        message_to_user: list = await lessons_object.get_all_lessons_for_group()
+        message_to_user: list = await lessons_object.get_lessons_for_3d()
+        await message.answer(text="💤 Ожидайте операция выполняется")
 
-        await message.answer("<i><b>Расписание занятий:</b></i>", parse_mode="HTML")
-        for lesson in message_to_user:
-            await message.answer(text=lesson, parse_mode="HTML")
+        all_less: list = list()
+
+        print(message_to_user[1])
+
+        if message_to_user:
+
+            indx_week_days: int = 0    
+            str_to_append: str = ""
+            for message_lessons in message_to_user[0]:                
+                if message_lessons != "\n\n":
+                    str_to_append += message_lessons
+                
+                else:
+
+                    all_less.append(f"<b><i>День недели: {message_to_user[1][indx_week_days]}</i></b>\n\n" + str_to_append)
+
+                    indx_week_days += 1
+
+                    str_to_append = ""
+
+            
+            for lessons in all_less:
+                
+                await message.answer(text=lessons, parse_mode="HTML")
+
+        else:
+
+            await message.answer(text="🔴 Занятий нет")
     
     else:
 
