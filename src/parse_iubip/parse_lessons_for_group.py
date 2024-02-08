@@ -56,8 +56,21 @@ class Lessons:
         for item in res_json[self.name_group][1]:
             for day in res_json[self.name_group][1][item][1]:
                 for lessons in res_json[self.name_group][1][item][1].get(day):
+
+                    #Берём время расписания пар
+                    time_to_lesson: dict = {
+                        1: "<b>08:20 - 09:50</b>",
+                        2: "<b>10:00 - 11:30</b>",
+                        3: "<b>11:40 - 13:10</b>",
+                        4: "<b>13:30 - 15:00</b>",
+                        5: "<b>15:10 - 16:40</b>",
+                        6: "<b>17:00 - 18:30</b>",
+                        7: "<b>18:40 - 20:10</b>",
+                        8: "<b>20:20 - 21:50</b>",
+                    }
+                    
                     result: list = list(res_json[self.name_group][1][item][1].get(day).get(lessons))[0]
-                    message = emojize(f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n", language="en")
+                    message = emojize(f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n{emojize(":hourglass_not_done:", language="en")} <b>Время пары</b>: {time_to_lesson.get(int(result.get("LES")))}\n\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n", language="en")
                     all_lessons.append(message)    
         
         return all_lessons
@@ -77,7 +90,22 @@ class Lessons:
                     result: list = list(res_json[self.name_group][1][item][1].get(day).get(lessons))[0]
                     data_find = result.get("DATE").split("-")
                     if int(now_day) == int(data_find[0]):
-                        message = f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n"
+
+                        
+                        #Берём время расписания пар
+                        
+                        time_to_lesson: dict = {
+                            1: "<b>08:20 - 09:50</b>",
+                            2: "<b>10:00 - 11:30</b>",
+                            3: "<b>11:40 - 13:10</b>",
+                            4: "<b>13:30 - 15:00</b>",
+                            5: "<b>15:10 - 16:40</b>",
+                            6: "<b>17:00 - 18:30</b>",
+                            7: "<b>18:40 - 20:10</b>",
+                            8: "<b>20:20 - 21:50</b>",
+                        }
+
+                        message = f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n{emojize(":hourglass_not_done:", language="en")} <b>Время пары</b>: {time_to_lesson.get(int(result.get("LES")))}\n\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n"
                         all_lessons.append(message)
                         all_lessons.append("\n")
 
