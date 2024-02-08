@@ -1,25 +1,32 @@
 import sys, os
 import logging
 
+#Устанавливаем локальный путь
 sys.path.insert(1, os.path.join(sys.path[0], "../.."))
 
+#Aiogram
 from aiogram import Router, F
 from aiogram.types import Message, FSInputFile
 from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 
-from datetime import datetime
 
+#Импорт сторонних библиотек
+from datetime import datetime
 from emoji import emojize
+
 
 #Локальные директивы
 from src.bot.text import commands_text
 from src.bot.kb import inline_kb, reply_kb
 from src.bot.states import lessons_for_group, work_with_db as wwd, reviews as rev
 from src.parse_iubip.parse_lessons_for_group import Lessons
+
+
 #БД
 from src.database import db_templates as db_t, db_reviews as db_r
 
+#Роутер, обработка команд бота
 commands_router = Router()
 
 
@@ -58,6 +65,9 @@ async def all_groups_command(message: Message) -> None:
 @commands_router.message(lambda message: message.text[2:].lower() in "все пары")
 @commands_router.message(Command("all_lessons"))    
 async def get_all_lessons(message: Message, state: FSMContext):
+    """
+        Пользователь получает список всех имеющихся пар
+    """
     logging.info("Обработка, получение всех пар")
     await state.set_state(lessons_for_group.GetLessonsForGroup.name_group)
     await message.answer(text=commands_text.text_to_find_group)
@@ -65,7 +75,10 @@ async def get_all_lessons(message: Message, state: FSMContext):
 
 @commands_router.message(lambda message: message.text[2:].lower() in "пары на сегодня")
 @commands_router.message(Command("lessons_now"))
-async def command_lessons_now(message: Message, state: FSMContext):
+async def command_lessons_now(message: Message, state: FSMContext) -> None:
+    """
+        Пользователь получает список всех пар на текущий день
+    """
     logging.info("Обработка команды 'пары на сегодня'")
     await state.set_state(lessons_for_group.GetLessonsNow.name_group)
     await message.answer(text=commands_text.text_to_find_group)
@@ -90,7 +103,10 @@ async def cancel_command(message: Message, state: FSMContext) -> None:
 #Работа с шаблонами
     
 @commands_router.message(Command("create_template"))
-async def create_template(message: Message, state: FSMContext):
+async def create_template(message: Message, state: FSMContext) -> None:
+    """
+        Создание шаблона по команде create_template
+    """
     await message.answer("💥 Хорошо, {0} давай создадим тебе шаблон для поиска. Не забудь его можно удалить с помощью команды <b>/delete_template</b> !".format(message.from_user.full_name), parse_mode="HTML")
     await state.set_state(wwd.CreateTemplate.name_group)
     logging.info("Пользователь {} создает свой шаблон, ввод названия группы").format(message.from_user.full_name)
@@ -98,7 +114,10 @@ async def create_template(message: Message, state: FSMContext):
 
 
 @commands_router.message(Command("delete_template"))
-async def delete_template(message: Message):
+async def delete_template(message: Message) -> None:
+    """
+        Удаляем шаблон по команде - delete_templates
+    """
     await message.answer("💥 Вы выбрали удалить шаблон, ожидайте, операция выполняется")
     result = await db_t.del_temp(message.from_user.id)
     if result:
@@ -108,7 +127,7 @@ async def delete_template(message: Message):
 
 
 @commands_router.message(Command("template"))
-async def get_lessons_for_template(message: Message):
+async def get_lessons_for_template(message: Message) -> None:
     """
         Обработка шаблона, вывод списка пар на 3 дня.
     """
@@ -156,8 +175,6 @@ async def get_lessons_for_template(message: Message):
 
 
 # Работа с отзывами
-        
-
 @commands_router.message(Command("review"))
 async def review_user(message: Message, state: FSMContext) -> None:
     """
