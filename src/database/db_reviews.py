@@ -24,7 +24,7 @@ async def get_reviews_by_tgid(tg_id: int) -> list | None:
 
 async def add_review(**kwargs) -> bool:
     try:
-        db.cursor.execute(f"INSERT INTO reviews (name_user, message, tg_id) VALUES (?, ?, ?)", tuple(kwargs.values(),))
+        db.cursor.execute(f"INSERT INTO reviews (name_user, message, date, tg_id) VALUES (?, ?, ?, ?)", tuple(kwargs.values(),))
         db.db.commit()
         return True
     except sql.OperationalError:

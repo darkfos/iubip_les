@@ -10,10 +10,12 @@ from aiogram.fsm.context import FSMContext
 
 from datetime import datetime
 
+from emoji import emojize
+
 #Локальные директивы
 from src.bot.text import commands_text
 from src.bot.kb import inline_kb, reply_kb
-from src.bot.states import lessons_for_group, work_with_db as wwd
+from src.bot.states import lessons_for_group, work_with_db as wwd, reviews as rev
 from src.parse_iubip.parse_lessons_for_group import Lessons
 #БД
 from src.database import db_templates as db_t, db_reviews as db_r
@@ -28,7 +30,7 @@ async def start_bot(message: Message) -> None:
     """
 
     #Картинка для отправки
-    photo_to_send = FSInputFile("iubip_les/src/static/main_iubip.png")
+    photo_to_send = FSInputFile("src/static/main_iubip.png")
     logging.info("Пользователь {} активировал команду start".format(message.from_user.full_name))
     await message.answer_photo(photo=photo_to_send, caption=await commands_text.get_start_message(message.from_user.full_name), parse_mode="HTML", reply_markup=await reply_kb.get_start_bt())
 
@@ -38,7 +40,7 @@ async def help_commands(message: Message) -> None:
     """
         Команда для помощи.
     """
-    photo_to_send = FSInputFile("iubip_les/src/static/help_photo.jpg")
+    photo_to_send = FSInputFile("src/static/help_photo.jpg")
     logging.info("Пользователь {} активировал команду help".format(message.from_user.full_name))
     await message.answer_photo(photo=photo_to_send, caption=await commands_text.get_help_commands(), parse_mode="HTML")
 
@@ -83,6 +85,8 @@ async def cancel_command(message: Message, state: FSMContext) -> None:
     await message.answer(text=commands_text.text_cancel, parse_mode="HTML")
 
 
+
+
 #Работа с шаблонами
     
 @commands_router.message(Command("create_template"))
@@ -99,7 +103,7 @@ async def delete_template(message: Message):
     result = await db_t.del_temp(message.from_user.id)
     if result:
         await message.answer("💥 Ваш шаблон <b>был успешно удалён</b>", parse_mode="HTML")
-        logging.info("Пользователь {} удалил свой шаблон").format(message.from_user.full_name)
+        logging.info("Пользователь {} удалил свой шаблон".format(message.from_user.full_name))
     else: await message.answer("🔴 <b>Шаблон не был удалён</b>, возможно вы его ещё не создали", parse_mode="HTML")
 
 
@@ -109,7 +113,7 @@ async def get_lessons_for_template(message: Message):
         Обработка шаблона, вывод списка пар на 3 дня.
     """
     
-    logging.info("Пользователь {} вызвал шаблон для получения расписания на 3 дня").format(message.from_user.full_name)
+    logging.info("Пользователь {0} вызвал шаблон для получения расписания на 3 дня".format(message.from_user.full_name))
     result = await db_t.get_temp(message.from_user.id)
     if result:
         lessons_object = Lessons(result[0])
@@ -118,7 +122,6 @@ async def get_lessons_for_template(message: Message):
         await message.answer(text="💤 Ожидайте операция выполняется")
 
         all_less: list = list()
-
 
         if message_to_user:
 
@@ -148,3 +151,17 @@ async def get_lessons_for_template(message: Message):
     else:
 
         await message.answer(text="🔴 Не могу выполнить данную команду")
+
+
+
+
+# Работа с отзывами
+        
+
+@commands_router.message(Command("review"))
+async def review_user(message: Message, state: FSMContext) -> None:
+    """
+        Обработка команды 'review', получаем состояние review
+    """
+    await message.answer(text=emojize(":check_mark: Введите ваше <b>имя</b>", language="en"), parse_mode="HTML")
+    await state.set_state(rev.ReviewUser.name_user)

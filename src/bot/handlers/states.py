@@ -6,9 +6,13 @@ sys.path.insert(1, os.path.join(sys.path[0], "../.."))
 from aiogram import types, Router
 from aiogram.fsm.context import FSMContext
 
+from emoji import emojize
+from datetime import datetime
+
 #Локальные директивы
 from src.bot.states.lessons_for_group import GetLessonsForGroup, GetLessonsNow
 from src.bot.states.work_with_db import CreateTemplate, CreateReview
+from src.bot.states.reviews import ReviewUser
 from src.bot.filters import check_group_in_list, check_templates
 
 from src.parse_iubip.parse_lessons_for_group import Lessons
@@ -97,3 +101,35 @@ async def create_template(message: types.Message, state: FSMContext):
         await message.answer("💥 Ваш шаблон был успешно создан")
     else:
         await message.answer("🔴 К сожалению ваш шаблон не был создан.")
+
+
+#Обработка состояния, получение имени пользователя для отзыва
+@state_router.message(ReviewUser.name_user)
+async def get_name_user(message: types.Message, state: FSMContext) -> None:
+    await message.answer(text=emojize(":check_mark: Отлично, теперь напишите <b>свой отзыв</b>", language="en"), parse_mode="HTML")
+    await state.update_data(name_user=message.text)
+    await state.set_state(ReviewUser.message_user)
+
+
+#Обработка состояние, получение текста пользователя для отзыва
+@state_router.message(ReviewUser.message_user)
+async def get_name_user(message: types.Message, state: FSMContext) -> None:
+
+    try:
+        await message.answer(text="<i>Ваш отзыв был успешно сохранён!</i>", parse_mode="HTML")
+
+        await state.update_data(message_user=message.text)
+        await state.update_data(date_message_from_user=datetime.now())
+
+        #Получаем данные из состояния
+        all_data_review: dict = await state.get_data()
+
+        await state.clear()
+
+        print(all_data_review)
+
+        #Запись данных в таблицу БД
+        await db_reviews.add_review(name_user=all_data_review.get("name_user"), message=all_data_review.get("message_user"), date=all_data_review.get("date_message_from_user"), tg_id=message.from_user.id)
+
+    except Exception:
+        await message.answer(text="Ошибка")

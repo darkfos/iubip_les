@@ -18,6 +18,7 @@ class Database:
             user_id INTEGER  PRIMARY KEY autoincrement,
             name_user TEXT,
             message TEXT,
+            date TEXT,
             tg_id TEXT
             )"""
         )

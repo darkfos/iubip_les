@@ -15,6 +15,7 @@ async def set_commands_to_bot(iubip_bot: Bot) -> None:
         types.BotCommand(command="create_template", description="💥 Создание шаблона"),
         types.BotCommand(command="delete_template", description="💥 Удаление шаблона"),
         types.BotCommand(command="template", description="💥 Поиск по шаблону"),
+        types.BotCommand(command="review", description="💥 Оставить отзыв"),
         types.BotCommand(command="cancel", description="💥 Отмена")
     )
 
