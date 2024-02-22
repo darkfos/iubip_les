@@ -19,7 +19,7 @@ from src.bot.utils import utilities_for_bot
 
 
 async def start_bot():
-    session = AiohttpSession(proxy=PROXY_URL)
+    #session = AiohttpSession(proxy=PROXY_URL)
     Bot_iubip = Bot(token=TOKEN)
     storage = MemoryStorage()
     dp_bot = Dispatcher(bot=Bot_iubip, storage=storage)
