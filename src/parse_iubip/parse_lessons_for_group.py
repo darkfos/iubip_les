@@ -68,10 +68,12 @@ class Lessons:
                         7: "<b>18:40 - 20:10</b>",
                         8: "<b>20:20 - 21:50</b>",
                     }
-                    
+
                     result: list = list(res_json[self.name_group][1][item][1].get(day).get(lessons))[0]
-                    message = emojize(f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n{emojize(":hourglass_not_done:", language="en")} <b>Время пары</b>: {time_to_lesson.get(int(result.get("LES")))}\n\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n", language="en")
-                    all_lessons.append(message)    
+                    message = emojize(
+                        f"📅 <b>Дата: {result.get('DATE')}</b>\n🎓 <b>Пара №:</b> {result.get('LES')}\n{emojize(':hourglass_not_done:', language='en')} <b>Время пары</b>: {time_to_lesson.get(int(result.get('LES')))}\n\n📚 <b>Предмет:</b> {result.get('SUBJECT').rstrip()}\n🚪 <b>Аудитория:</b> {result.get('AUD')}\n👨🎓 <b>Преподаватель:</b> {result.get('NAME')}\n🏫 <b>Кафедра:</b> {result.get('CAFEDRA')}\n🧑🏫 <b>Курс:</b> {result.get('COURSE')}\n",
+                        language='en')
+                    all_lessons.append(message)
         
         return all_lessons
 
@@ -105,7 +107,9 @@ class Lessons:
                             8: "<b>20:20 - 21:50</b>",
                         }
 
-                        message = f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n{emojize(":hourglass_not_done:", language="en")} <b>Время пары</b>: {time_to_lesson.get(int(result.get("LES")))}\n\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n"
+                        message = emojize(
+                            f"📅 <b>Дата: {result.get('DATE')}</b>\n🎓 <b>Пара №:</b> {result.get('LES')}\n{emojize(':hourglass_not_done:', language='en')} <b>Время пары</b>: {time_to_lesson.get(int(result.get('LES')))}\n\n📚 <b>Предмет:</b> {result.get('SUBJECT').rstrip()}\n🚪 <b>Аудитория:</b> {result.get('AUD')}\n👨🎓 <b>Преподаватель:</b> {result.get('NAME')}\n🏫 <b>Кафедра:</b> {result.get('CAFEDRA')}\n🧑🏫 <b>Курс:</b> {result.get('COURSE')}\n",
+                            language='en')
                         all_lessons.append(message)
                         all_lessons.append("\n")
 
@@ -163,10 +167,9 @@ class Lessons:
 
                         all_week_days.append(week_days.get(local_date.weekday()))
 
-                        message = f"📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n{emojize(":hourglass_not_done:", language="en")} <b>Время пары</b>: {time_to_lesson.get(int(result.get("LES")))}\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n\n"
+                        message = f'📅 <b>Дата: {result.get("DATE")}</b>\n🎓 <b>Пара №:</b> {result.get("LES")}\n{emojize(":hourglass_not_done:", language="en")} <b>Время пары</b>: {time_to_lesson.get(int(result.get("LES")))}\n📚 <b>Предмет:</b> {result.get("SUBJECT").rstrip()}\n🚪 <b>Аудитория:</b> {result.get("AUD")}\n👨‍🎓 <b>Преподаватель:</b> {result.get("NAME")}\n🏫 <b>Кафедра:</b> {result.get("CAFEDRA")}\n🧑‍🏫 <b>Курс:</b> {result.get("COURSE")}\n\n'
                         d3_lessons.append(message)
                         flag_state = True
-
                     else:
 
                         flag_state = False

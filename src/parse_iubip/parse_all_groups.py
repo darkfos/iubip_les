@@ -33,13 +33,14 @@ class Groups:
 
         params = {"do": "groups"}
         req_to_iu = self.session.post(self.__URL, headers=HEADERS, data=params)
-
+        print(req_to_iu.status_code)
+        print(req_to_iu.content)
 
         if req_to_iu.status_code == 200:
             
             #Запись данных в файл
             with open("data/all_groups_data.json", "w", encoding="UTF-8") as f_w:
-                json_data: list = json.dumps(req_to_iu.json(), indent=4, ensure_ascii=False)
+                json_data: json = json.dumps(req_to_iu.json(), indent=4, ensure_ascii=False)
                 f_w.write(json_data)
             
             return req_to_iu.json()

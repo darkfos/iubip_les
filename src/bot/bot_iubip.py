@@ -6,9 +6,10 @@ sys.path.insert(1, os.path.join(sys.path[0], "../.."))
 
 from aiogram import Dispatcher, Bot
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.client.session.aiohttp import AiohttpSession
 
 #Локальные директивы
-from read_information import TOKEN
+from read_information import TOKEN, PROXY_URL
 
 from src.bot.handlers.commands import commands_router
 from src.bot.handlers.callbacks import callback_router
@@ -18,6 +19,7 @@ from src.bot.utils import utilities_for_bot
 
 
 async def start_bot():
+    session = AiohttpSession(proxy=PROXY_URL)
     Bot_iubip = Bot(token=TOKEN)
     storage = MemoryStorage()
     dp_bot = Dispatcher(bot=Bot_iubip, storage=storage)

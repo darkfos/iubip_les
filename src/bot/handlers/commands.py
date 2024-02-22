@@ -109,7 +109,7 @@ async def create_template(message: Message, state: FSMContext) -> None:
     """
     await message.answer("💥 Хорошо, {0} давай создадим тебе шаблон для поиска. Не забудь его можно удалить с помощью команды <b>/delete_template</b> !".format(message.from_user.full_name), parse_mode="HTML")
     await state.set_state(wwd.CreateTemplate.name_group)
-    logging.info("Пользователь {} создает свой шаблон, ввод названия группы").format(message.from_user.full_name)
+    logging.info("Пользователь {} создает свой шаблон, ввод названия группы".format(message.from_user.full_name))
     await message.answer("🖍️ Введи название своей группы")
 
 
