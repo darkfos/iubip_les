@@ -183,5 +183,3 @@ class Lessons:
                         all_week_days.clear()
                         now_day += 1
                         d3_lessons.append("\n\n")
-
-        return result_week_days
