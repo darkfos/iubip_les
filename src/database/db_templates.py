@@ -10,7 +10,7 @@ from src.database.db import Database
 db = Database()
 
 
-async def get_temp(tg_id: int) -> str | bool:
+async def get_temp(tg_id: int) -> tuple | bool:
 
     try:
         result: tuple = db.cursor.execute(f"""
